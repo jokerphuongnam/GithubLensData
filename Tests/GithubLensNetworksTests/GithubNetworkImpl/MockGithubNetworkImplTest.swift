@@ -2,7 +2,7 @@ import Testing
 import Foundation
 import Alamofire
 import Mocker
-@testable import Data
+@testable import GithubLensNetworks
 
 @Suite("Mock Github users tests")
 struct MockGithubNetworkImplTest {

@@ -1,18 +1,14 @@
 import Testing
 import Foundation
 import Alamofire
-@testable import Data
+@testable import GithubLensNetworks
 
 @Suite("Real Url")
 private struct RealUrlBaseAsyncTests {
     private let sut: AsyncAFNetwork
-    private let session: Session
-    private let decoder: JSONDecoder
     
     init() {
-        sut = TestAsyncAFNetwork()
-        session = Session.default
-        decoder = JSONDecoder()
+        sut = TestAsyncAFNetwork(session: Session.default, decoder: JSONDecoder())
     }
     
     @Test(
@@ -29,7 +25,7 @@ private struct RealUrlBaseAsyncTests {
         
         await #expect(throws: Never.self) {
             // when
-            _ = try await sut.send(session: session, decoder: decoder, request: request)
+            _ = try await sut.send(request: request)
             
             // then
             #expect(true)

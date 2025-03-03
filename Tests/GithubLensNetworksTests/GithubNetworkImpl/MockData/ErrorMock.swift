@@ -1,4 +1,4 @@
-@testable import Data
+@testable import GithubLensNetworks
 
 struct ErrorMock {
     let statusCode: Int

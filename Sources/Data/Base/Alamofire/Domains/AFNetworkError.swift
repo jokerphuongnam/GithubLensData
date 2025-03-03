@@ -1,21 +1,21 @@
-struct AFResponseError: Decodable {
+public struct AFResponseError: Decodable, Sendable {
     let statusCode: Int?
     let status: Bool?
     let message: String?
 
-    init(_ status: Bool, statusCode: Int? = nil) {
+    public init(_ status: Bool, statusCode: Int? = nil) {
         self.status = status
         self.statusCode = statusCode
         message = nil
     }
 
-    init(_ message: String, statusCode: Int? = nil) {
+    public init(_ message: String, statusCode: Int? = nil) {
         self.message = message
         self.statusCode = statusCode
         status = nil
     }
     
-    init(status: Bool, message: String, statusCode: Int? = nil) {
+    public init(status: Bool, message: String, statusCode: Int? = nil) {
         self.status = status
         self.message = message
         self.statusCode = statusCode
@@ -23,12 +23,12 @@ struct AFResponseError: Decodable {
 }
 
 extension AFResponseError: Equatable {
-    static func == (lhs: AFResponseError, rhs: AFResponseError) -> Bool {
+    public static func == (lhs: AFResponseError, rhs: AFResponseError) -> Bool {
         return lhs.status == rhs.status && lhs.message == rhs.message
     }
 }
 
-enum AFNetworkError: Error {
+public enum AFNetworkError: Error {
     case connectionFailed(Error)
     case serverError
     case maintenance
@@ -39,6 +39,7 @@ enum AFNetworkError: Error {
     case timeout
     case noConnection
     case expired
+    case notFound
 
     func responseDecode() -> Decodable? {
         switch self {
@@ -62,12 +63,14 @@ enum AFNetworkError: Error {
             return nil
         case .expired:
             return nil
+        case .notFound:
+            return nil
         }
     }
 }
 
 extension AFNetworkError: Equatable {
-    static func == (lhs: AFNetworkError, rhs: AFNetworkError) -> Bool {
+    public static func == (lhs: AFNetworkError, rhs: AFNetworkError) -> Bool {
         switch (lhs, rhs) {
         case (.connectionFailed(_), .connectionFailed(_)):
             return true
@@ -82,6 +85,10 @@ extension AFNetworkError: Equatable {
         case (.dataNotExist, .dataNotExist):
             return true
         case (.statusCodeNotExist, .statusCodeNotExist):
+            return true
+        case (.notFound, .notFound):
+            return true
+        case (.timeout, .timeout):
             return true
         default:
             return false

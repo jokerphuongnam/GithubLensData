@@ -3,9 +3,7 @@ import Foundation
 
 public protocol AsyncAFNetwork { }
 
-@available(iOS 18.0, *)
 public extension AsyncAFNetwork {
-    @available(macOS 10.15, *)
     func send<Request: AFRequest>(session: Session, decoder: JSONDecoder, request: Request) async throws -> Request.Response {
         let restRequest = session.request(
             request.url,
@@ -30,7 +28,6 @@ public extension AsyncAFNetwork {
                     print("Request \(description)")
                 }
 #endif
-                
                 restRequest.responseDecodable(
                     of: Request.Response.self,
                     queue: DispatchQueue.init(
@@ -38,21 +35,40 @@ public extension AsyncAFNetwork {
                         qos: .utility
                     )
                 ) { response in
-                    guard let data = response.data else {
-                        continuation.resume(throwing: AFNetworkError.dataNotExist)
-                        return
-                    }
-                    
+                    let data = response.data
                     guard let statusCode = response.response?.statusCode else {
-                        continuation.resume(throwing: AFNetworkError.statusCodeNotExist)
+                        if case .sessionTaskFailed(URLError.timedOut) = response.error {
+                            continuation.resume(throwing: AFNetworkError.timeout)
+                        } else if let error = response.error {
+#if DEBUG
+                            backgroundQueue.async {
+                                print("error: ", error)
+                            }
+#endif
+                            continuation.resume(
+                                throwing: AFNetworkError.otherError(
+                                    AFResponseError(
+                                        status: false,
+                                        message: error.localizedDescription,
+                                        statusCode: nil
+                                    )
+                                )
+                            )
+                        }
                         return
                     }
 #if DEBUG
-                    print("Status code:", statusCode)
+                    backgroundQueue.async {
+                        print("Status code:", statusCode)
+                    }
 #endif
                     
                     switch statusCode {
-                    case 200..<500:
+                    case 200..<300:
+                        guard let data else {
+                            continuation.resume(throwing: AFNetworkError.dataNotExist)
+                            return
+                        }
 #if DEBUG
                         backgroundQueue.async {
                             print("==============================================")
@@ -64,9 +80,7 @@ public extension AsyncAFNetwork {
                         }
 #endif
                         do {
-                            var response = try decoder.decode(Request.Response.self, from: data)
-                            response.request = restRequest
-                            response.statusCode = statusCode
+                            let response = try decoder.decode(Request.Response.self, from: data)
                             continuation.resume(returning: response)
                         } catch {
 #if DEBUG
@@ -83,8 +97,12 @@ public extension AsyncAFNetwork {
                                 )
                             )
                         }
+                    case 404:
+                        continuation.resume(throwing: AFNetworkError.notFound)
+                    case 500...:
+                        continuation.resume(throwing: AFNetworkError.serverError)
                     default:
-                        if let error = String(data: data, encoding: .utf8) {
+                        if let data, let error = String(data: data, encoding: .utf8) {
                             continuation.resume(
                                 throwing: AFNetworkError.otherError(
                                     AFResponseError(

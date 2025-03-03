@@ -1,12 +1,12 @@
 import Foundation
 import Alamofire
 
-public protocol GithubNetwork: AsyncAFNetwork {
+public protocol GithubNetwork {
     func fetchGithubUser(perPage: Int, since: Int) async throws -> [FetchGithubUsersResponse]
     func fetchGithubUserDetails(loginUsername: String) async throws -> FetchGithubUserDetailsResponse
 }
 
-struct GithubNetworkImpl: GithubNetwork {
+struct GithubNetworkImpl: GithubNetwork, AsyncAFNetwork {
     private let session: Session
     private let decoder: JSONDecoder
     

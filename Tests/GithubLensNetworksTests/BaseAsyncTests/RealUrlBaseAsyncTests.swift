@@ -1,7 +1,7 @@
 import Testing
 import Foundation
 import Alamofire
-@testable import Data
+@testable import GithubLensNetworks
 
 @Suite("Real Url")
 private struct RealUrlBaseAsyncTests {
@@ -11,7 +11,7 @@ private struct RealUrlBaseAsyncTests {
     
     init() {
         sut = TestAsyncAFNetwork()
-        session = Session.default
+        session = .default
         decoder = JSONDecoder()
     }
     

@@ -1,7 +1,7 @@
 public struct AFResponseError: Decodable, Sendable {
-    let statusCode: Int?
-    let status: Bool?
-    let message: String?
+    public let statusCode: Int?
+    public let status: Bool?
+    public let message: String?
 
     public init(_ status: Bool, statusCode: Int? = nil) {
         self.status = status

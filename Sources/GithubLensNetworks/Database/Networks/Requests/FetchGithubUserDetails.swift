@@ -18,12 +18,12 @@ struct FetchGithubUserDetailsRequest: GithubAFRequest {
 }
 
 public struct FetchGithubUserDetailsResponse: AFResponse {
-    let login: String
-    let avatarUrl: String
-    let htmlUrl: String
-    let location: String?
-    let followers: Int?
-    let following: Int?
+    public let login: String
+    public let avatarUrl: String
+    public let htmlUrl: String
+    public let location: String?
+    public let followers: Int?
+    public let following: Int?
     
     enum CodingKeys: String, CodingKey {
         case login

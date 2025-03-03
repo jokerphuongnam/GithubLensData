@@ -1,9 +1,9 @@
 import Alamofire
 import Foundation
 
-public protocol AsyncAFNetwork { }
+protocol AsyncAFNetwork { }
 
-public extension AsyncAFNetwork {
+extension AsyncAFNetwork {
     func send<Request: AFRequest>(session: Session, decoder: JSONDecoder, request: Request) async throws -> Request.Response {
         let restRequest = session.request(
             request.url,

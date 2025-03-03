@@ -3,15 +3,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "Data",
+    name: "GithubLensNetworks",
     platforms: [
         .iOS(.v18),
         .macOS(.v11)
     ],
     products: [
         .library(
-            name: "Data",
-            targets: ["Data"]
+            name: "GithubLensNetworks",
+            targets: ["GithubLensNetworks"]
         ),
     ],
     dependencies: [
@@ -20,15 +20,15 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "Data",
+            name: "GithubLensNetworks",
             dependencies: [
                 "Alamofire"
             ]
         ),
         .testTarget(
-            name: "DataTests",
+            name: "GithubLensNetworksTests",
             dependencies: [
-                "Data",
+                "GithubLensNetworks",
                 "Alamofire",
                 "Mocker"
             ]

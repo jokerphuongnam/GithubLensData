@@ -1,6 +1,6 @@
 import Foundation
 import Alamofire
-@testable import Data
+@testable import GithubLensNetworks
 
 struct PingRequest: AFRequest {
     typealias Response = PingResponse

@@ -18,9 +18,9 @@ struct FetchGithubUsersRequest: GithubAFRequest {
 }
 
 public struct FetchGithubUsersResponse: AFResponse {
-    let login: String
-    let avatarURL: String
-    let htmlURL: String
+    public let login: String
+    public let avatarURL: String
+    public let htmlURL: String
     
     enum CodingKeys: String, CodingKey {
         case login

@@ -97,6 +97,8 @@ extension AsyncAFNetwork {
                                 )
                             )
                         }
+                    case 403:
+                        continuation.resume(throwing: AFNetworkError.forbidden)
                     case 404:
                         continuation.resume(throwing: AFNetworkError.notFound)
                     case 500...:

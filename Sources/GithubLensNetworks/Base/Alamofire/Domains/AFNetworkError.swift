@@ -40,6 +40,7 @@ public enum AFNetworkError: Error {
     case noConnection
     case expired
     case notFound
+    case forbidden
 
     func responseDecode() -> Decodable? {
         switch self {
@@ -65,6 +66,8 @@ public enum AFNetworkError: Error {
             return nil
         case .notFound:
             return nil
+        case .forbidden:
+            return nil
         }
     }
 }
@@ -89,6 +92,8 @@ extension AFNetworkError: Equatable {
         case (.notFound, .notFound):
             return true
         case (.timeout, .timeout):
+            return true
+        case (.forbidden, .forbidden):
             return true
         default:
             return false

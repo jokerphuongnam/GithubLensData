@@ -6,6 +6,10 @@ struct ErrorMock {
     
     static let mocks: [Self] = [
         .init(
+            statusCode: 403,
+            error: AFNetworkError.forbidden
+        ),
+        .init(
             statusCode: 404,
             error: AFNetworkError.notFound
         ),

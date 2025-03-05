@@ -22,6 +22,12 @@ public struct FetchGithubUsersResponse: AFResponse {
     public let avatarURL: String
     public let htmlURL: String
     
+    init(login: String, avatarURL: String, htmlURL: String) {
+        self.login = login
+        self.avatarURL = avatarURL
+        self.htmlURL = htmlURL
+    }
+    
     enum CodingKeys: String, CodingKey {
         case login
         case avatarURL = "avatar_url"
